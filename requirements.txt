@@ -14,3 +14,4 @@ itemadapter~=0.8.0
 pytube~=15.0.0
 requests~=2.31.0
 pillow~=10.3.0
+fastapi_users
