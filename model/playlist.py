@@ -14,6 +14,6 @@ class Playlist(Base):
 
     class Settings:
         name = "playlists"
-        use_cache = True
-        cache_expiration_time = datetime.timedelta(seconds=3600)
-        cache_capacity = 20
+        # use_cache = True
+        # cache_expiration_time = datetime.timedelta(seconds=10)
+        # cache_capacity = 20
