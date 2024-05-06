@@ -16,3 +16,4 @@ requests~=2.31.0
 pillow~=10.3.0
 fastapi-users[beanie]
 fastapi_mail
+httpx_oauth
