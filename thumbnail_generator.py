@@ -1,8 +1,16 @@
+import os
+
 import requests
 from PIL import Image
 
 
 def combine_images(columns, space, images, filename):
+    directory = "thumbnail"
+
+    if not os.path.exists(directory):
+        # Create the directory
+        os.makedirs(directory)
+
     rows = len(images) // columns
     if len(images) % columns:
         rows += 1
@@ -25,7 +33,8 @@ def combine_images(columns, space, images, filename):
         if (i+1) % columns == 0:
             y += height_max + space
             x = 0
-    background.save(f'thumbnail/{filename}.png')
+
+    background.save(f'{directory}/{filename}.png')
 
 
 if __name__ == '__main__':
