@@ -3,8 +3,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.inmemory import InMemoryBackend
 
 import openapi_tags
+from controller.admin_controller import admin_controller_router
 from controller.auth_controller import auth_controller_router
 from controller.chart_controller import chart_controller_router
 from controller.playlist_controller import playlist_controller_router
@@ -23,6 +26,7 @@ logger = getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    FastAPICache.init(InMemoryBackend())
     scheduler.start()
     tasks.init()
     logger.info("Created Schedule Object")
@@ -38,6 +42,8 @@ app.include_router(user_controller_router, prefix="/api/v1/users", tags=["Users"
 app.include_router(auth_controller_router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(chart_controller_router, prefix="/api/v1/charts", tags=["Charts"])
 app.include_router(playlist_controller_router, prefix="/api/v1/playlists", tags=["Playlists"])
+app.include_router(admin_controller_router, prefix="/api/v1/admin", tags=["Admin"])
+
 
 app.add_middleware(
     CORSMiddleware,

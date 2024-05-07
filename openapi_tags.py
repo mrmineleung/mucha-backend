@@ -23,4 +23,8 @@ tags_metadata = [
         "name": "Playlists",
         "description": "Getting / creating music playlist data.",
     },
+    {
+        "name": "Admin",
+        "description": "Admin panel.",
+    },
 ]
