@@ -20,8 +20,7 @@ async def get_chart_type(chart_name: Charts):
 
 
 @chart_controller_router.get('/{chart_name}/types/{chart_type}', status_code=200)
-@cache(expire=300, namespace="charts")
-async def get_chart_data_by_type(chart_name: Charts, chart_type: str, sort: str | None = None,
+async def get_chart_data_by_type(chart_name: Charts, chart_type: str, sort: str | None = "asc",
                                  position_from: str | None = None, position_to: str | None = None):
     return await charts_facade.get_chart(chart_name, chart_type,
-                                         {sort: sort, position_from: position_from, position_to: position_to})
+                                         {"sort": sort, "position_from": position_from, "position_to": position_to})

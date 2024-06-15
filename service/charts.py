@@ -2,6 +2,8 @@ import json
 import logging
 from json import JSONDecodeError
 
+from fastapi_cache.decorator import cache
+
 from enumerations import Charts
 # from extensions import mongo
 
@@ -19,7 +21,7 @@ async def get_available_chart_type(chart_name: str):
     return await Ranking.distinct('type', {"chart": chart_name})
     # return mongo.db.rankings.distinct('type', {"chart": chart_name})
 
-
+@cache(expire=300, namespace="charts")
 async def get_chart(chart_name: Charts, chart_type: str):
     charts = {Charts.MELON: _get_melon_chart, Charts.BILLBOARD: _get_billboard_chart, Charts.BUGS: None, Charts.FLO: None, Charts.YOUTUBE: None,
               Charts.SPOTIFY: None}

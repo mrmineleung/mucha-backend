@@ -16,7 +16,7 @@ async def get_chart(chart_name: Charts, chart_type: str, args: dict) -> dict:
 
     logger.debug(f'Chart data: {chart_data}')
 
-    sorting = args.get('sort', 'asc')
+    sorting = args.get('sort')
 
     if args.get('position_from') is not None and args.get('position_to') is not None:
         position_from = int(args['position_from'])

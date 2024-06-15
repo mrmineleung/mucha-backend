@@ -8,9 +8,11 @@ from fastapi_cache.backends.inmemory import InMemoryBackend
 
 import openapi_tags
 from controller.admin_controller import admin_controller_router
+from controller.analytics_controller import analytics_controller_router
 from controller.auth_controller import auth_controller_router
 from controller.chart_controller import chart_controller_router
 from controller.playlist_controller import playlist_controller_router
+from controller.song_controller import song_controller_router
 from controller.user_controller import user_controller_router
 import os
 from dotenv import load_dotenv
@@ -43,6 +45,8 @@ app.include_router(auth_controller_router, prefix="/api/v1/auth", tags=["Authent
 app.include_router(chart_controller_router, prefix="/api/v1/charts", tags=["Charts"])
 app.include_router(playlist_controller_router, prefix="/api/v1/playlists", tags=["Playlists"])
 app.include_router(admin_controller_router, prefix="/api/v1/admin", tags=["Admin"])
+app.include_router(analytics_controller_router, prefix="/api/v1/analytics", tags=["Analytics"])
+app.include_router(song_controller_router, prefix="/api/v1/songs", tags=["Songs"])
 
 
 app.add_middleware(

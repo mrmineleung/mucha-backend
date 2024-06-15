@@ -30,3 +30,16 @@ class Ranking(Base):
         use_cache = True
         cache_expiration_time = datetime.timedelta(seconds=3600)
         cache_capacity = 20
+
+
+class RankHistoryView(BaseModel):
+    rank: str | None = None
+    song_title: str | None = None
+    song_artists: str | None = None
+
+class RankingHistoryView(BaseModel):
+    chart: str | None = None
+    type: str | None = None
+    date: str | None = None
+    ranking: List[RankHistoryView]
+

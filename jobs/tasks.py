@@ -37,7 +37,7 @@ def init():
     scheduler.add_job(
         func=melon_chart_day_crawler,
         trigger="cron",
-        hour="9",
+        hour="22",
         id="melon_chart_day_crawler",
         name="melon_chart_day_crawler",
         next_run_time=datetime.now(timezone),

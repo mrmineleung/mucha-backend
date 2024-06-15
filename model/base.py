@@ -3,8 +3,8 @@ from beanie import Document, before_event, Insert, Replace, Update, SaveChanges
 
 
 class Base(Document):
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: datetime | None = datetime.now()
+    updated_at: datetime | None = datetime.now()
 
     class Settings:
         is_root = False
