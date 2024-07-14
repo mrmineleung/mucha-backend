@@ -71,5 +71,4 @@ jobs:
           key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
           script: |
             docker run -t -i -d -p 80:80 -p 443:443 --env-file ./env --restart=always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:${{ env.timestamp }}
-            
             docker image prune -f
