@@ -39,6 +39,9 @@ jobs:
     env:
       DOCKER_CLI_EXPERIMENTAL: enabled
       DOCKER_BUILDKIT: 1
+
+    outputs:
+      timestamp: ${{ steps.current-time.outputs.formattedTime }}
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -68,14 +71,13 @@ jobs:
 
       - name: SSH into GCP instance and deploy FastAPI
         env:
-          $TIMESTAMP: ${{ needs.build.steps.current-time.outputs.formattedTime }}
+          TIMESTAMP: ${{ needs.build.outputs.timestamp }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.GCE_INSTANCE_IP }}
           username: ${{ secrets.GCE_SSH_USERNAME }}
           key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
           script: |
-            whoami
             echo "Deploying $TIMESTAMP ..."
             docker run -t -i -d -p 80:80 -p 443:443 --env-file ./.env --restart=always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:$TIMESTAMP
             docker image prune -f
