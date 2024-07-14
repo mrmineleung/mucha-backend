@@ -70,14 +70,13 @@ jobs:
       #     target: "/home/${{ secrets.GCE_SSH_USERNAME }}/"
 
       - name: SSH into GCP instance and deploy FastAPI
-        env:
-          TIMESTAMP: ${{ needs.build.outputs.timestamp }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.GCE_INSTANCE_IP }}
           username: ${{ secrets.GCE_SSH_USERNAME }}
           key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
           script: |
-            echo "Deploying $TIMESTAMP ..."
-            docker run -t -i -d -p 80:80 -p 443:443 --env-file ./.env --restart=always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:$TIMESTAMP
+            echo "${{ needs.build.outputs.timestamp }}"
+            echo "Deploying ${{ needs.build.outputs.timestamp }} ..."
+            docker run -t -i -d -p 80:80 -p 443:443 --env-file ./.env --restart=always ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:${{ needs.build.outputs.timestamp }}
             docker image prune -f
