@@ -18,10 +18,10 @@ EXPOSE 80
 EXPOSE 443
 
 # Define environment variable
-ENV NAME ob-sample-fast-api-docker
+#ENV NAME ob-sample-fast-api-docker
 
 # Set the maintainer label
-LABEL maintainer="mine <mrmineleung@gmail.com>"
+#LABEL maintainer="mine <mrmineleung@gmail.com>"
 
 # Run main.py when the container launches
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
