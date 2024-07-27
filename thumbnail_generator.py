@@ -2,6 +2,8 @@ import os
 
 import requests
 from PIL import Image
+import base64
+from io import BytesIO
 
 
 def combine_images(columns, space, images, filename):
@@ -34,7 +36,16 @@ def combine_images(columns, space, images, filename):
             y += height_max + space
             x = 0
 
-    background.save(f'{directory}/{filename}.png')
+    # background.save(f'{directory}/{filename}.png')
+    buffered = BytesIO()
+    background.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue())
+    img_base64_str = img_str.decode("utf-8")
+    print(img_base64_str)
+    # thumbnails.save_thumbnail(filename, img_base64_str)
+    return img_base64_str
+
+
 
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ from model.play_history import PlayHistory
 from model.playlist import Playlist
 from model.ranking import Ranking
 from model.song import Song
+from model.thumbnail import Thumbnail
 
 
 async def init_db():
@@ -20,7 +21,7 @@ async def init_db():
         , tls=True, tlsAllowInvalidCertificates=True
     )
 
-    document_models = [User, AccessToken, Ranking, Song, Playlist, PlayHistory]
+    document_models = [User, AccessToken, Ranking, Song, Playlist, PlayHistory, Thumbnail]
 
     await init_beanie(database=client.music_charts, document_models=document_models)
 

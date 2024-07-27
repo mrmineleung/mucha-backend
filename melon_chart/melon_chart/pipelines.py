@@ -179,6 +179,7 @@ class PlaylistMongoDBWriterPipeline(object):
             playlist_id = playlist['_id']
 
         image_list = list(map(lambda x: x['album_image'], item['ranking'][:6]))
-        thumbnail_generator.combine_images(2, 0, image_list, playlist_id)
+        thumbnail_image = thumbnail_generator.combine_images(2, 0, image_list, playlist_id)
+        self.db.thumbnails.replace_one({'playlist_id': str(playlist_id)}, {'playlist_id': str(playlist_id), 'image': thumbnail_image}, upsert=True)
         item.pop('_id', None)
         return item

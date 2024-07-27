@@ -15,6 +15,7 @@ from .youtube_api import search_data_from_youtube
 
 logger = logging.getLogger(__name__)
 
+
 class BillboardChartPipeline:
     def process_item(self, item, spider):
         return item
@@ -134,6 +135,7 @@ class RankingMongoDBWriterPipeline(object):
         item.pop('_id', None)
         return item
 
+
 class PlaylistMongoDBWriterPipeline(object):
 
     def __init__(self, mongo_uri, mongo_db):
@@ -177,6 +179,8 @@ class PlaylistMongoDBWriterPipeline(object):
             playlist_id = playlist['_id']
 
         image_list = list(map(lambda x: x['album_image'], item['ranking'][:6]))
-        thumbnail_generator.combine_images(2, 0, image_list, playlist_id)
+        thumbnail_image = thumbnail_generator.combine_images(2, 0, image_list, playlist_id)
+        self.db.thumbnails.replace_one({'playlist_id': str(playlist_id)},
+                                       {'playlist_id': str(playlist_id), 'image': thumbnail_image}, upsert=True)
         item.pop('_id', None)
         return item

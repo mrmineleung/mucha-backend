@@ -1,16 +1,21 @@
+import base64
+import io
 import os
 from typing import Annotated, List
 
+from PIL import Image
 from fastapi import HTTPException, Depends, APIRouter
 
 from fastapi.responses import FileResponse
 from fastapi_cache.decorator import cache
+from starlette.responses import StreamingResponse
 
 from controller.role_checker import RoleChecker
 from db import User
 from model.playlist import Playlist
 from model.song import Song
 from facade import playlists as playlists_facade
+from service import thumbnails as thumbnails_service
 
 playlist_controller_router = APIRouter()
 
@@ -79,8 +84,19 @@ async def get_public_playlist(playlist_id: str):
 @playlist_controller_router.get('/thumbnail/{playlist_id}', status_code=200)
 @cache(expire=3600, namespace="playlists")
 async def get_playlist_thumbnail(playlist_id: str):
-    result: Playlist = await playlists_facade.get_public_playlist_by_id(playlist_id)
-    if result is not None and os.path.isfile(f"thumbnail/{playlist_id}.png"):
-        return FileResponse(f"thumbnail/{playlist_id}.png", media_type="image/png")
+    # result: Playlist = await playlists_facade.get_public_playlist_by_id(playlist_id)
+    # if result is not None and os.path.isfile(f"thumbnail/{playlist_id}.png"):
+    #     return FileResponse(f"thumbnail/{playlist_id}.png", media_type="image/png")
+    # else:
+    #     raise HTTPException(status_code=404, detail='Thumbnail not found')
+    thumbnail = await thumbnails_service.get_thumbnail_by_playlist_id(playlist_id)
+    if thumbnail is not None:
+        image = Image.open(io.BytesIO(base64.b64decode(thumbnail.image)))
+        # imgio = io.BytesIO(base64.decodebytes(bytes(thumbnail.image, "utf-8")))
+        # return FileResponse(img, media_type="image/png")
+        imgio = io.BytesIO()
+        image.save(imgio, 'PNG')
+        imgio.seek(0)
+        return StreamingResponse(content=imgio, media_type="image/png")
     else:
         raise HTTPException(status_code=404, detail='Thumbnail not found')
