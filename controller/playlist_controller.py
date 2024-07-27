@@ -82,7 +82,6 @@ async def get_public_playlist(playlist_id: str):
 
 
 @playlist_controller_router.get('/thumbnail/{playlist_id}', status_code=200)
-@cache(expire=3600, namespace="playlists")
 async def get_playlist_thumbnail(playlist_id: str):
     # result: Playlist = await playlists_facade.get_public_playlist_by_id(playlist_id)
     # if result is not None and os.path.isfile(f"thumbnail/{playlist_id}.png"):
