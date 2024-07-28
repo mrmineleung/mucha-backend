@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan, openapi_tags=openapi_tags.tags_metadata)
+app = FastAPI(lifespan=lifespan, openapi_tags=openapi_tags.tags_metadata, redirect_slashes=False)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
 
