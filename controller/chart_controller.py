@@ -7,7 +7,7 @@ from facade import charts as charts_facade
 chart_controller_router = APIRouter()
 
 
-@chart_controller_router.get('/', status_code=200)
+@chart_controller_router.get('', status_code=200)
 @cache(expire=3600, namespace="charts")
 async def get_charts():
     return await charts_facade.get_charts()
