@@ -2,7 +2,6 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 
 COPY . /app/
 
-RUN mkdir -p /app/thumbnail
 
 ## Use an official Python runtime as a parent image
 #FROM python:3.12-slim
