@@ -1,21 +1,16 @@
-# Global settings for Istio
 global:
   istio:
-    ingressGateway: "istio-ingressgateway"
-
-# Application settings - Define the app name and version
+    ingressGateway: istio-ingressgateway
 app:
-  name: "mucha-backend"    # Application name
-  version: "v1"     # Default version for blue/green deployment
-
-# Environment-specific configurations
+  name: mucha-backend
+  version: v1
 environment:
-  name: ""
-  domain: "example.com"
-  path: "/"
-  image: "my-app"
+  name: staging
+  domain: staging.api.mucha.com.mp
+  path: /
+  image: mrmineleung/mucha-backend
   replicas: 3
   port: 80
   targetPort: 80
   containerPort: 80
-  version: ""
+  version: 20250616-044106
