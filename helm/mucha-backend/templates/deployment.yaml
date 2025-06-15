@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.app.name }}
-          image: "{{ .Values.environment.image }}:{{ .Values.environment.versions }}"
+          image: "{{ .Values.environment.image }}:{{ .Values.environment.version }}"
           ports:
             - containerPort: {{ .Values.environment.containerPort }}
           envFrom:

@@ -17,9 +17,8 @@ on:
 
 
 jobs:
-  prepare:
+  deploy:
     runs-on: ubuntu-latest
-
     permissions:
       checks: write
       contents: write
@@ -27,40 +26,6 @@ jobs:
       issues: write
       pull-requests: write
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Get current time
-        uses: josStorer/get-current-time@v2
-        id: current-time
-        with:
-          format: YYYYMMDD-HHmmss
-          utcOffset: "+08:00"
-
-      - uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}/values.yaml'
-          branch: deployment/${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}
-          targetBranch: deployment/${{ github.event.inputs.environment }}
-          commitChange: false
-          createPR: 'true'
-          description: 'Deploy to ${{ github.event.inputs.environment }}'
-          message: '${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}'
-          title: 'Update ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} version to ${{ github.event.inputs.version }}'
-          changes: |
-            {
-              "environment.name": "${{ github.event.inputs.environment }}",
-              "environment.version": "${{ github.event.inputs.version }}",
-              "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
-              "environment.domain": "${{ github.event.inputs.environment }}.${{ secrets.API_ENDPOINT }}"
-            }
-
-    outputs:
-      timestamp: ${{ steps.current-time.outputs.formattedTime }}
-  deploy:
-    needs: prepare
-    runs-on: ubuntu-latest
     env:
       OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
       OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
@@ -80,6 +45,25 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Update Chart values
+      uses: fjogeleit/yaml-update-action@main
+      with:
+        valueFile: 'helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}/values.yaml'
+        branch: deployment/${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}
+        targetBranch: deployment/${{ github.event.inputs.environment }}
+        commitChange: false
+        createPR: 'true'
+        description: 'Deploy to ${{ github.event.inputs.environment }}'
+        message: '${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}'
+        title: 'Update ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} version to ${{ github.event.inputs.version }}'
+        changes: |
+          {
+            "environment.name": "${{ github.event.inputs.environment }}",
+            "environment.version": "${{ github.event.inputs.version }}",
+            "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
+            "environment.domain": "${{ github.event.inputs.environment }}.${{ secrets.API_ENDPOINT }}"
+          }
 
     - name: Deploy to OKE using Helm
       run: |
