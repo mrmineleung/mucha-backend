@@ -4,19 +4,19 @@ metadata:
   name: {{ .Values.app.name }}
   labels:
     app: {{ .Values.app.name }}
-    version: {{ .Values.app.version }}
+    version: {{ .Values.environment.version }}
 spec:
   replicas: {{ .Values.environment.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.app.name }}
-      version: {{ .Values.app.version }}
+      version: {{ .Values.environment.version }}
       environment: {{ .Values.environment.name }}
   template:
     metadata:
       labels:
         app: {{ .Values.app.name }}
-        version: {{ .Values.app.version }}
+        version: {{ .Values.environment.version }}
         environment: {{ .Values.environment.name }}
     spec:
       containers:

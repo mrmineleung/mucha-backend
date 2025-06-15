@@ -6,7 +6,6 @@ global:
 # Application settings - Define the app name and version
 app:
   name: "mucha-backend"    # Application name
-  version: "v1"     # Default version for blue/green deployment
 
 # Environment-specific configurations
 environment:
