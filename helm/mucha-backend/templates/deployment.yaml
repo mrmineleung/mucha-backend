@@ -5,6 +5,7 @@ metadata:
   labels:
     app: {{ .Values.app.name }}
     version: {{ .Values.environment.version }}
+    environment: {{ .Values.environment.name }}
 spec:
   replicas: {{ .Values.environment.replicas }}
   selector:
