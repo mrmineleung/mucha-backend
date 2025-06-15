@@ -1,0 +1,78 @@
+name: Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Define env name'
+        required: true
+        type: choice
+        options:
+          - staging
+          - prod
+        default: 'staging'
+      version:
+        description: 'Define version (image name)'
+        required: true
+
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDD-HHmmss
+          utcOffset: "+08:00"
+
+      - uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}/values.yaml'
+          branch: deployment/${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}
+          targetBranch: deployment/${{ github.event.inputs.environment }}
+          createPR: 'true'
+          description: 'Deploy to ${{ github.event.inputs.environment }}'
+          message: '${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}'
+          title: 'Update ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} version to ${{ github.event.inputs.version }}'
+          changes: |
+            {
+              "environment.name": "${{ github.event.inputs.environment }}",
+              "environment.version": "${{ github.event.inputs.version }}",
+              "environment.image": "{{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
+              "environment.domain": "${{ github.event.inputs.environment }}.${{ env.API_ENDPOINT }}",
+            }
+
+    outputs:
+      timestamp: ${{ steps.current-time.outputs.formattedTime }}
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: v3
+
+    - name: Set up OCI CLI
+      uses: oracle-actions/setup-oci-cli@v1
+      with:
+        oci-version: '3.0.0'
+      env:
+        OCI_CLI_AUTH: api_key
+        OCI_CLI_USER: ${{ secrets.OCI_USER }}
+        OCI_CLI_KEY_FILE: ${{ secrets.OCI_PRIVATE_KEY }}
+
+    - name: Log in to OKE Cluster
+      run: |
+        oci ce cluster create-kubeconfig --cluster-id ${{ secrets.OCI_CLUSTER_ID }} --file $HOME/.kube/config
+
+    - name: Deploy to OKE using Helm
+      run: |
+        helm upgrade --install ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} ./helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }} --namespace ${{ github.event.inputs.environment }}
+      

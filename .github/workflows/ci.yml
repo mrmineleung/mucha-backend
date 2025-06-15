@@ -1,0 +1,60 @@
+name: OCI FastAPI Docker Build and Push
+
+#on:
+#  push:
+#    branches:
+#      - master
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Define env name'
+        required: true
+        type: choice
+        options:
+          - staging
+          - prod
+        default: 'staging'
+      branch:
+        description: 'Define branch name'
+        required: true
+        default: 'master'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      
+    - name: Login to Docker Hub
+      run: echo ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+    - name: Get current time
+      uses: josStorer/get-current-time@v2
+      id: current-time
+      with:
+        format: YYYYMMDD-HHmmss
+        utcOffset: "+08:00"
+
+    - name: Build and push Docker image
+      run: |
+        docker buildx create --use
+        docker buildx build \
+          --file Dockerfile \
+          --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:latest \
+          --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}:${{ steps.current-time.outputs.formattedTime }} \
+          --push .
+        echo "${{ steps.current-time.outputs.formattedTime }}"
+
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      DOCKER_BUILDKIT: 1
+
+    outputs:
+      timestamp: ${{ steps.current-time.outputs.formattedTime }}
