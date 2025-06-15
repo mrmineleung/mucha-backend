@@ -78,6 +78,9 @@ jobs:
       with:
         cluster: ${{ secrets.OKE_CLUSTER_OCID }}
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Deploy to OKE using Helm
       run: |
         helm upgrade --install ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} ./helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }} --namespace ${{ secrets.DOCKERHUB_REPOSITORY_NAME }}-${{ github.event.inputs.environment }}
