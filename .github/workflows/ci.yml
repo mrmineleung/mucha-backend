@@ -1,24 +1,9 @@
-name: OCI FastAPI Docker Build and Push
+name: Build and Push
 
-#on:
-#  push:
-#    branches:
-#      - master
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Define env name'
-        required: true
-        type: choice
-        options:
-          - staging
-          - prod
-        default: 'staging'
-      branch:
-        description: 'Define branch name'
-        required: true
-        default: 'master'
+  push:
+    branches:
+      - master
 
 
 jobs:
