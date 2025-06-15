@@ -15,6 +15,5 @@ spec:
       route:
         - destination:
             host: {{ .Values.app.name }}
-#            subset: {{ .Values.blueGreen.activeVersion }}
             port:
               number: {{ .Values.environment.port }}
