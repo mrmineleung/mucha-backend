@@ -20,6 +20,9 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,7 +38,7 @@ jobs:
         with:
           valueFile: 'helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}/values.yaml'
           branch: deployment/${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}
-          targetBranch: deployment/${{ github.event.inputs.environment }}
+          targetBranch: deployment/${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}
           createPR: 'true'
           description: 'Deploy to ${{ github.event.inputs.environment }}'
           message: '${{ github.event.inputs.environment }}-${{ github.event.inputs.version }}'
