@@ -43,8 +43,5 @@ spec:
         - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config-volume
           configMap:
             name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
-            items:
-                - key: {{ .Values.app.name }}-{{ .Values.environment.name }}-config.env
-                  path: .env  # Mount all the key-value pairs in the configMap as a single .env file
 
 
