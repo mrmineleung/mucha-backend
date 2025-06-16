@@ -59,6 +59,7 @@ jobs:
         title: 'Update ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} version to ${{ github.event.inputs.version }}'
         changes: |
           {
+            "app.namespace": "${{ secrets.PROJECT_NAMESPACE }}",
             "environment.name": "${{ github.event.inputs.environment }}",
             "environment.version": "${{ github.event.inputs.version }}",
             "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",

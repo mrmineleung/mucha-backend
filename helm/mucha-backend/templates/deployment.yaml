@@ -31,12 +31,20 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: {{ .Values.environment.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
           volumeMounts:
-            - name: env
+            - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config-volume
               mountPath: "/.env"
+              subPath: .env
               readOnly: true
       volumes:
-        - name: env
+        - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config-volume
           configMap:
             name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
+            items:
+                - key: {{ .Values.app.name }}-{{ .Values.environment.name }}-config.env
+                  path: .env  # Mount all the key-value pairs in the configMap as a single .env file
+
 
