@@ -44,7 +44,7 @@ spec:
           configMap:
             name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
             items:
-                - key: BASE_URL
+                - key: {{ .Values.app.name }}-{{ .Values.environment.name }}-config.env
                   path: .env  # Mount all the key-value pairs in the ConfigMap as a single .env file
 
 
