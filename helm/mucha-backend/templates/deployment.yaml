@@ -24,7 +24,12 @@ spec:
           image: "{{ .Values.environment.image }}:{{ .Values.environment.version }}"
           ports:
             - containerPort: {{ .Values.environment.containerPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
+          volumeMounts:
+            - name: env
+              mountPath: "/.env"
+              readOnly: true
+      volumes:
+        - name: env
+          configMap:
+            name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
 
