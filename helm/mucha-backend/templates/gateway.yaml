@@ -12,7 +12,8 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - "{{ .Values.environment.domain }}"
-      tls:
-        # Optional: Add TLS configuration if needed
-        mode: PASSTHROUGH
+        - "*"
+#        - "{{ .Values.environment.domain }}"
+#      tls:
+#        # Optional: Add TLS configuration if needed
+#        mode: PASSTHROUGH

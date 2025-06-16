@@ -5,7 +5,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   hosts:
-    - "{{ .Values.environment.domain }}"
+    - "*"
+#    - "{{ .Values.environment.domain }}"
   gateways:
     - {{ .Release.Name }}-gateway
   http:
