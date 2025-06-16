@@ -67,5 +67,5 @@ jobs:
 
     - name: Deploy to OKE using Helm
       run: |
-        helm upgrade --install ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} ./helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }} --namespace ${{ secrets.DOCKERHUB_REPOSITORY_NAME }}-${{ github.event.inputs.environment }}
+        helm upgrade --install ${{ secrets.DOCKERHUB_REPOSITORY_NAME }} ./helm/${{ secrets.DOCKERHUB_REPOSITORY_NAME }} --namespace ${{ secrets.PROJECT_NAMESPACE }}-${{ github.event.inputs.environment }}
       
