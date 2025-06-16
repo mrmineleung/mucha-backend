@@ -11,7 +11,6 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.app.name }}
-      version: {{ .Values.environment.version }}
       environment: {{ .Values.environment.name }}
   template:
     metadata:
