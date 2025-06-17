@@ -21,8 +21,6 @@ metadata:
 spec:
   parentRefs:
   - name: {{ .Release.Name }}-gateway
-  hostnames:
-  - "*"
   rules:
   - matches:
     - path:
