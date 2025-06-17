@@ -1,6 +1,6 @@
 import ssl
 
-from pytube import Search
+from pytubefix import Search
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -13,4 +13,4 @@ if __name__ == "__main__":
     print(s.video_id, s.views, s.title, s.vid_info['videoDetails']['title'] , s.vid_info['videoDetails']['author'], s.caption_tracks, 'MUSIC_VIDEO_TYPE_UGC')
 
     s = Search('twice one spark').results[0]
-    print(s.video_id, s.views, s.title, s.vid_info['videoDetails']['title'] , s.vid_info['videoDetails']['author'], s.caption_tracks, s.vid_info['videoDetails']['musicVideoType'],'MUSIC_VIDEO_TYPE_OMV')
+    print(s.video_id, s.views, s.title, s.vid_info['videoDetails']['title'] , s.vid_info['videoDetails']['author'], s.caption_tracks,'MUSIC_VIDEO_TYPE_OMV')

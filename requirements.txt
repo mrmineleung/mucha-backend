@@ -18,3 +18,4 @@ fastapi-users[beanie]
 fastapi_mail
 httpx_oauth
 fastapi-cache2
+pytubefix

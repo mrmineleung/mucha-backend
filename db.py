@@ -23,7 +23,7 @@ async def init_db():
 
     document_models = [User, AccessToken, Ranking, Song, Playlist, PlayHistory, Thumbnail]
 
-    await init_beanie(database=client.music_charts, document_models=document_models)
+    await init_beanie(database=client.music_charts, document_models=document_models, allow_index_dropping=True)
 
 
 class OAuthAccount(BaseOAuthAccount):
