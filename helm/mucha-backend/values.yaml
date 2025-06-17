@@ -17,4 +17,5 @@ environment:
   port: 80
   targetPort: 80
   containerPort: 80
+  nodePort: 31600
   version: ""

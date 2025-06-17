@@ -6,7 +6,10 @@ metadata:
 spec:
   selector:
     app: {{ .Values.app.name }}
+  type: NodePort
   ports:
     - port: {{ .Values.environment.port }}
       targetPort: {{ .Values.environment.targetPort }}
+      nodePort: {{ .Values.environment.nodePort }}
+      protocol: TCP
       name: http
