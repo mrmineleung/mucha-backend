@@ -22,11 +22,7 @@ spec:
   parentRefs:
   - name: {{ .Release.Name }}-gateway
   rules:
-#  - matches:
-#    - path:
-#        type: PathPrefix
-#        value: /{{ .Values.environment.name }}
-    backendRefs:
+  - backendRefs:
     - name: {{ .Values.app.name }}
       port: {{ .Values.environment.containerPort }}
 ---
@@ -41,10 +37,6 @@ spec:
   hostnames:
   - {{ .Values.environment.name }}.{{ .Values.environment.domain }}
   rules:
-#  - matches:
-#    - path:
-#        type: PathPrefix
-#        value: {{ .Values.environment.path }}
-    backendRefs:
+  - backendRefs:
     - name: {{ .Values.app.name }}
       port: {{ .Values.environment.containerPort }}
