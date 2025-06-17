@@ -10,7 +10,7 @@ app:
 # Environment-specific configurations
 environment:
   name: ""
-  domain: "example.com"
+  domain: "mucha.com.mp"
   path: "/"
   image: "my-app"
   replicas: 3
