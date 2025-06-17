@@ -1,8 +1,17 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: {{ .Release.Name }}-gateway
-  namespace: {{ .Release.Namespace }}
+  name: istio-gateway
+  namespace: istio-system
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
+{{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
+{{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "istio-example-credential"*/}}
+    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"
+    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
+    oci.oraclecloud.com/security-rule-management-mode: "None"
 spec:
   gatewayClassName: istio
   listeners:
@@ -12,15 +21,31 @@ spec:
     allowedRoutes:
       namespaces:
         from: Same
+{{/*  - name: https*/}}
+{{/*    hostname: "*.istio-gatewayapi.com"*/}}
+{{/*    protocol: HTTPS*/}}
+{{/*    port: 443*/}}
+{{/*    allowedRoutes:*/}}
+{{/*      namespaces:*/}}
+{{/*        from: All*/}}
+{{/*    tls:*/}}
+{{/*      mode: Terminate*/}}
+{{/*      certificateRefs:*/}}
+{{/*        - kind: Secret*/}}
+{{/*          name: istio-example-credential*/}}
+{{/*          namespace: cert-manager*/}}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: {{ .Release.Name }}-{{ .Values.environment.name }}-0
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    environment: {{ .Values.environment.name }}
 spec:
   parentRefs:
-  - name: {{ .Release.Name }}-gateway
+  - name: istio-gateway.istio-system.svc.cluster.local
   rules:
   - backendRefs:
     - name: {{ .Values.app.name }}
@@ -31,11 +56,14 @@ kind: HTTPRoute
 metadata:
   name: {{ .Release.Name }}-{{ .Values.environment.name }}-1
   namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.app.name }}
+    environment: {{ .Values.environment.name }}
 spec:
   parentRefs:
-  - name: {{ .Release.Name }}-gateway
+  - name: istio-gateway.istio-system.svc.cluster.local
   hostnames:
-  - {{ .Values.environment.name }}.{{ .Values.environment.domain }}
+  - {{ .Values.environment.domain }}
   rules:
   - backendRefs:
     - name: {{ .Values.app.name }}

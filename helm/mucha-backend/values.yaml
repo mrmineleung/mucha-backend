@@ -19,3 +19,6 @@ environment:
   containerPort: 80
   nodePort: 31600
   version: ""
+
+oci:
+  networkSecurityGroup: ""
