@@ -31,7 +31,10 @@ spec:
           from: All
       tls:
         mode: Terminate
-        credentialName: {{ .Values.app.name }}-cert
+        certificateRefs:
+        - kind: Secret
+          name: {{ .Values.app.name }}-cert
+          namespace: istio-system
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
