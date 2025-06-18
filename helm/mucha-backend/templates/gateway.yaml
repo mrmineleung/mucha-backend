@@ -29,7 +29,7 @@ spec:
         namespaces:
           from: All
     - name: {{ .Values.app.domain }}-https
-      hostname: "*.{{ .Values.app.domain }}"
+      hostname: "{{ .Values.app.domain }}"
       protocol: HTTPS
       port: 443
       allowedRoutes:
