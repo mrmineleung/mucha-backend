@@ -15,9 +15,12 @@ environment:
   path: "/"
   image: ""
   replicas: 3
-  port: 80
-  targetPort: 80
-  containerPort: 80
+  httpPort: 80
+  httpsPort: 443
+  httpTargetPort: 80
+  httpsTargetPort: 443
+  httpContainerPort: 80
+  httpsContainerPort: 443
   nodePort: 31600
   version: ""
 

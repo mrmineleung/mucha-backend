@@ -11,7 +11,11 @@ spec:
   selector:
     app: {{ .Values.app.name }}
   ports:
-    - port: {{ .Values.environment.port }}
-      targetPort: {{ .Values.environment.targetPort }}
+    - port: {{ .Values.environment.httpPort }}
+      targetPort: {{ .Values.environment.httpTargetPort }}
       protocol: TCP
       name: http
+    - port: {{ .Values.environment.httpsPort }}
+      targetPort: {{ .Values.environment.httpsTargetPort }}
+      protocol: TCP
+      name: https

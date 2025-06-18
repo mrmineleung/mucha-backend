@@ -10,20 +10,21 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
     service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"
 {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
-    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
-    oci.oraclecloud.com/security-rule-management-mode: "None"
+{{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
+{{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
 spec:
   gatewayClassName: istio
   listeners:
     - name: http
-      port: 80
       protocol: HTTP
+      port: 80
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       protocol: HTTPS
       port: 443
+      hostname: "{{ .Values.app.domain }}"
       allowedRoutes:
         namespaces:
           from: All
