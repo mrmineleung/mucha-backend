@@ -49,7 +49,9 @@ spec:
   rules:
   - backendRefs:
     - name: {{ .Values.app.name }}
-      port: {{ .Values.environment.containerPort }}
+      port: {{ .Values.environment.httpContainerPort }}
+    - name: {{ .Values.app.name }}
+      port: {{ .Values.environment.httpsContainerPort }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -68,4 +70,6 @@ spec:
   rules:
   - backendRefs:
     - name: {{ .Values.app.name }}
-      port: {{ .Values.environment.containerPort }}
+      port: {{ .Values.environment.httpContainerPort }}
+    - name: {{ .Values.app.name }}
+      port: {{ .Values.environment.httpsContainerPort }}
