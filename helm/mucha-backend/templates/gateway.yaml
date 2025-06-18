@@ -4,13 +4,14 @@ metadata:
   name: tls-gateway
   namespace: istio-system
   annotations:
+    oci.oraclecloud.com/load-balancer-type: "lb"
     service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
-    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"
+{{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
+{{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"*/}}
 {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
-{{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
+    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"
 {{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
 spec:
   gatewayClassName: istio
