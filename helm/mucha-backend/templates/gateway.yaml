@@ -48,13 +48,9 @@ spec:
     - name: tls-gateway
       namespace: istio-system
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /{{ .Values.environment.name }}
-      backendRefs:
-        - name: {{ .Values.app.name }}
-          port: {{ .Values.environment.containerPort }}
+  - backendRefs:
+    - name: {{ .Values.app.name }}
+      port: {{ .Values.environment.containerPort }}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -71,10 +67,6 @@ spec:
   hostnames:
     - {{ .Values.environment.domain }}
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: {{ .Values.environment.path }}
-      backendRefs:
-        - name: {{ .Values.app.name }}
-          port: {{ .Values.environment.containerPort }}
+  - backendRefs:
+    - name: {{ .Values.app.name }}
+      port: {{ .Values.environment.containerPort }}
