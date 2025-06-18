@@ -16,10 +16,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - "www.{{ .Values.app.domain }}"
     - "{{ .Values.app.domain }}"
-    - "staging.{{ .Values.app.domain }}"
-    - "prod.{{ .Values.app.domain }}"
   issuerRef:
     name: letsencrypt-prod-cluster
     kind: ClusterIssuer
