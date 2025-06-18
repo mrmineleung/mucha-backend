@@ -15,12 +15,12 @@ metadata:
 spec:
   gatewayClassName: istio
   listeners:
-    - name: http
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: All
+{{/*    - name: http*/}}
+{{/*      port: 80*/}}
+{{/*      protocol: HTTP*/}}
+{{/*      allowedRoutes:*/}}
+{{/*        namespaces:*/}}
+{{/*          from: All*/}}
     - name: {{ .Values.app.name }}-http
       hostname: "*.{{ .Values.app.domain }}"
       port: 80
