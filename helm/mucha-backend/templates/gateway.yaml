@@ -7,6 +7,7 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
+    cert-manager.io/issuer: letsencrypt-prod-cluster
 {{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
 {{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"*/}}
 {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
@@ -21,16 +22,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-{{/*    - name: https*/}}
-{{/*      protocol: HTTPS*/}}
-{{/*      port: 443*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*      tls:*/}}
-{{/*        mode: Terminate*/}}
-{{/*        certificateRefs:*/}}
-{{/*        - name: {{ .Values.app.name }}-cert*/}}
+    - name: https
+      protocol: HTTPS
+      hostname: {{ .Values.app.domain }}
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - name: {{ .Values.app.name }}-cert
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

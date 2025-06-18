@@ -6,7 +6,7 @@
 # Application settings - Define the app name and version
 app:
   name: "mucha-backend"    # Application name
-  domain: ""
+  domain: "mucha.com.mp"
 
 # Environment-specific configurations
 environment:
