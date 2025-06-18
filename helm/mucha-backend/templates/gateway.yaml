@@ -21,15 +21,15 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-{{/*    - name: {{ .Values.app.domain }}-http*/}}
-{{/*      hostname: "*.{{ .Values.app.domain }}"*/}}
-{{/*      port: 80*/}}
-{{/*      protocol: HTTP*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-    - name: {{ .Values.app.domain }}-https
-{{/*      hostname: "{{ .Values.app.domain }}"*/}}
+    - name: {{ .Values.app.name }}-http
+      hostname: "*.{{ .Values.app.domain }}"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: {{ .Values.app.name }}-https
+      hostname: "*.{{ .Values.app.domain }}"
       protocol: HTTPS
       port: 443
       allowedRoutes:
