@@ -55,7 +55,7 @@ jobs:
         title: 'Update ${{ github.event.inputs.chart }}'
         changes: |
           {
-            "app.domain": "${{ secrets.API_ENDPOINT }}",
+            "app.domain": "${{ secrets.API_ENDPOINT }}"
           }
 
     - name: Deploy to OKE using Helm
