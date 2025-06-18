@@ -1,0 +1,64 @@
+name: Helm Chart Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: 'Define helm chart'
+        required: true
+        type: choice
+        options:
+          - cert-manager
+        default: 'cert-manager'
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: write
+      actions: write
+      issues: write
+      pull-requests: write
+
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+    steps:
+    - name: Set up Helm
+      uses: azure/setup-helm@v4.3.0
+
+    - name: Configure Kubectl
+      uses: oracle-actions/configure-kubectl-oke@v1.5.0
+      id: test-configure-kubectl-oke-action
+      with:
+        cluster: ${{ secrets.OKE_CLUSTER_OCID }}
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Update Chart values
+      uses: fjogeleit/yaml-update-action@main
+      with:
+        valueFile: 'helm/${{ github.event.inputs.chart }}/values.yaml'
+        branch: deployment/${{ github.event.inputs.chart }}
+        targetBranch: deployment/${{ github.event.inputs.chart }}
+        commitChange: false
+        createPR: 'true'
+        description: 'Deploy to ${{ github.event.inputs.chart }}'
+        message: '${{ github.event.inputs.chart }}'
+        title: 'Update ${{ github.event.inputs.chart }}'
+        changes: |
+          {
+            "app.domain": "${{ secrets.API_ENDPOINT }}",
+          }
+
+    - name: Deploy to OKE using Helm
+      run: |
+        helm upgrade --install ${{ github.event.inputs.chart }} ./helm/${{ github.event.inputs.chart }}
+      

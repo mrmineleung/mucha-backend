@@ -1,18 +1,19 @@
 # Global settings for Istio
-global:
-  istio:
-    ingressGateway: "istio-ingressgateway"
+#global:
+#  istio:
+#    ingressGateway: "istio-ingressgateway"
 
 # Application settings - Define the app name and version
 app:
   name: "mucha-backend"    # Application name
+  domain: ""
 
 # Environment-specific configurations
 environment:
   name: ""
-  domain: "mucha.com.mp"
+  domain: ""
   path: "/"
-  image: "my-app"
+  image: ""
   replicas: 3
   port: 80
   targetPort: 80

@@ -60,6 +60,7 @@ jobs:
         changes: |
           {
             "app.namespace": "${{ secrets.PROJECT_NAMESPACE }}",
+            "app.domain": "${{ secrets.API_ENDPOINT }}",
             "environment.name": "${{ github.event.inputs.environment }}",
             "environment.version": "${{ github.event.inputs.version }}",
             "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",

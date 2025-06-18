@@ -1,0 +1,4 @@
+app:
+  name: "mucha-backend"    # Application name
+  domain: ""
+
