@@ -5,7 +5,7 @@ metadata:
   namespace: istio-system
 spec:
   acme:
-    email: admin@{{ .Values.app.domain }}
+    email: "admin@{{ .Values.app.domain }}"
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod-cluster

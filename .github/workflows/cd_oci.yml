@@ -63,7 +63,7 @@ jobs:
             "environment.name": "${{ github.event.inputs.environment }}",
             "environment.version": "${{ github.event.inputs.version }}",
             "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
-            "environment.domain": "${{ github.event.inputs.environment }}.${{ secrets.API_ENDPOINT }}",
+            "environment.domain": "${{ github.event.inputs.environment }}-${{ secrets.API_ENDPOINT }}",
             "oci.networkSecurityGroup": "${{ secrets.OCI_NETWORK_SECURITY_GROUP }}"
           }
 

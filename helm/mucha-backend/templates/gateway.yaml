@@ -19,12 +19,13 @@ spec:
     - name: http
       port: 80
       protocol: HTTP
+      hostname: "*.{{ .Values.app.domain }}"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       protocol: HTTPS
-      hostname: {{ .Values.app.domain }}
+      hostname: "*.{{ .Values.app.domain }}"
       port: 443
       allowedRoutes:
         namespaces:
