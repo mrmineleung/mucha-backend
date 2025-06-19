@@ -18,11 +18,30 @@ spec:
     - name: {{ .Values.app.name }}-http
       port: 80
       protocol: HTTP
-      hostname: "*.{{ .Values.app.domain }}"
+      hostname: "{{ .Values.app.domain }}"
       allowedRoutes:
         namespaces:
           from: All
     - name: {{ .Values.app.name }}-https
+      port: 443
+      protocol: HTTPS
+      hostname: "{{ .Values.app.domain }}"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+        - name: {{ .Values.app.name }}-cert
+          namespace: istio-system
+    - name: {{ .Values.app.name }}-wildcard-http
+      port: 80
+      protocol: HTTP
+      hostname: "*.{{ .Values.app.domain }}"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: {{ .Values.app.name }}-wildcard-https
       port: 443
       protocol: HTTPS
       hostname: "*.{{ .Values.app.domain }}"
@@ -32,8 +51,27 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-        - name: {{ .Values.app.name }}-cert
-          namespace: istio-system
+          - name: {{ .Values.app.name }}-cert
+            namespace: istio-system
+    - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-http
+      port: 80
+      protocol: HTTP
+      hostname: "{{ .Values.environment.domain }}"
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-https
+      port: 443
+      protocol: HTTPS
+      hostname: "{{ .Values.environment.domain }}"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: {{ .Values.app.name }}-cert
+            namespace: istio-system
 {{/*    - name: {{ .Values.app.name }}-https-default-tls-mode*/}}
 {{/*      port: 8443*/}}
 {{/*      protocol: HTTPS*/}}
@@ -84,12 +122,10 @@ spec:
   parentRefs:
     - name: tls-gateway
       namespace: istio-system
-      sectionName: {{ .Values.app.name }}-http
+      sectionName: {{ .Values.app.name }}-{{ .Values.environment.name }}-http
     - name: tls-gateway
       namespace: istio-system
-      sectionName: {{ .Values.app.name }}-https
-  hostnames:
-    - {{ .Values.environment.domain }}
+      sectionName: {{ .Values.app.name }}-{{ .Values.environment.name }}-https
   rules:
     - backendRefs:
       - name: {{ .Values.app.name }}
