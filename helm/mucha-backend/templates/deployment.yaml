@@ -32,7 +32,6 @@ spec:
               cpu: "500m"
           ports:
             - containerPort: {{ .Values.environment.httpContainerPort }}
-            - containerPort: {{ .Values.environment.httpsContainerPort }}
           envFrom:
             - configMapRef:
                 name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config

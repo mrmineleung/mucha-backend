@@ -7,8 +7,8 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
-    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"
+{{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
+{{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"*/}}
 {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
 {{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
 {{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
@@ -34,17 +34,17 @@ spec:
         certificateRefs:
         - name: {{ .Values.app.name }}-cert
           namespace: istio-system
-    - name: {{ .Values.app.name }}-https-default-tls-mode
-      port: 8443
-      protocol: HTTPS
-      hostname: "*.{{ .Values.app.domain }}"
-      allowedRoutes:
-        namespaces:
-          from: All
-      tls:
-        certificateRefs:
-        - name: {{ .Values.app.name }}-cert
-          namespace: istio-system
+{{/*    - name: {{ .Values.app.name }}-https-default-tls-mode*/}}
+{{/*      port: 8443*/}}
+{{/*      protocol: HTTPS*/}}
+{{/*      hostname: "*.{{ .Values.app.domain }}"*/}}
+{{/*      allowedRoutes:*/}}
+{{/*        namespaces:*/}}
+{{/*          from: All*/}}
+{{/*      tls:*/}}
+{{/*        certificateRefs:*/}}
+{{/*        - name: {{ .Values.app.name }}-cert*/}}
+{{/*          namespace: istio-system*/}}
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -59,13 +59,15 @@ spec:
   parentRefs:
     - name: tls-gateway
       namespace: istio-system
-  hostnames:
-    - "{{ .Values.environment.domain }}"
+      sectionName: {{ .Values.app.name }}-http
+    - name: tls-gateway
+      namespace: istio-system
+      sectionName: {{ .Values.app.name }}-https
   rules:
     - matches:
       - path:
           type: PathPrefix
-          value: {{ .Values.environment.path }}
+          value: /{{ .Values.environment.name }}
       backendRefs:
       - name: {{ .Values.app.name }}
         port: {{ .Values.environment.httpContainerPort }}
@@ -80,13 +82,15 @@ metadata:
     environment: {{ .Values.environment.name }}
 spec:
   parentRefs:
-  - name: tls-gateway
-    sectionName: {{ .Values.app.name }}-http
+    - name: tls-gateway
+      namespace: istio-system
+      sectionName: {{ .Values.app.name }}-http
+    - name: tls-gateway
+      namespace: istio-system
+      sectionName: {{ .Values.app.name }}-https
   hostnames:
-  - "{{ .Values.environment.domain }}"
+    - {{ .Values.environment.domain }}
   rules:
-  - filters:
-    - type: RequestRedirect
-      requestRedirect:
-        scheme: https
-        port: 443
+    - backendRefs:
+      - name: {{ .Values.app.name }}
+        port: {{ .Values.environment.httpContainerPort }}
