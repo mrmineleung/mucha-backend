@@ -35,16 +35,16 @@ spec:
         - name: {{ .Values.app.name }}-cert
           namespace: istio-system
     - name: {{ .Values.app.name }}-https-default-tls-mode
-        port: 8443
-        protocol: HTTPS
-        hostname: "*.{{ .Values.app.domain }}"
-        allowedRoutes:
-          namespaces:
-            from: All
-        tls:
-          certificateRefs:
-            - kind: {{ .Values.app.name }}-cert
-              name: istio-system
+      port: 8443
+      protocol: HTTPS
+      hostname: "*.{{ .Values.app.domain }}"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+        - name: {{ .Values.app.name }}-cert
+          namespace: istio-system
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
