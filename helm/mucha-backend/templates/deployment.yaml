@@ -28,3 +28,22 @@ spec:
           image: {{ .Values.app.image }}
           ports:
             - containerPort: {{ .Values.app.port }}
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "250m"
+            limits:
+              memory: "400Mi"
+              cpu: "500m"
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
+          volumeMounts:
+            - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config-volume
+              mountPath: "/.env"
+              subPath: .env
+              readOnly: true
+     volumes:
+       - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config-volume
+         configMap:
+           name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
