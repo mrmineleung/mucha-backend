@@ -2,6 +2,16 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: istio-gateway
+  namespace: istio-system
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
+    {{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
+    {{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"*/}}
+    {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
+    {{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
+    {{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
 spec:
   selector:
     istio: ingressgateway
