@@ -43,7 +43,7 @@ spec:
               mountPath: "/.env"
               subPath: .env
               readOnly: true
-     volumes:
-       - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config-volume
-         configMap:
-           name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
+      volumes:
+        - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config-volume
+          configMap:
+            name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
