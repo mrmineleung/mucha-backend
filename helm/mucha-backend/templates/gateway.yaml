@@ -20,6 +20,8 @@ spec:
         number: 80
         name: http
         protocol: HTTP
+      hosts:
+        - {{ .Values.app.host }}
     - port:
         number: 443
         name: https

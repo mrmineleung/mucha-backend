@@ -12,7 +12,10 @@ spec:
   gateways:
     - istio-gateway
   http:
-    - route:
+    - match:
+        - uri:
+            prefix: /{{ .Values.deployment.environment }}
+      route:
         {{- if .Values.deployment.canaryEnabled }}
         - destination:
             host: {{ .Values.app.name }}
