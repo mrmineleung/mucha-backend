@@ -55,7 +55,7 @@ jobs:
         title: 'Update ${{ github.event.inputs.chart }}'
         changes: |
           {
-            
+            "app.host": "${{ secrets.APP_HOST }}"
           }
 
     - name: Deploy to OKE using Helm

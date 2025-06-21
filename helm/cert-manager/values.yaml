@@ -1,4 +1,7 @@
 app:
-  name: "mucha-backend"    # Application name
-  domain: "mucha.com.mp"
+  name: "mucha-backend"
+  host:
 
+tls:
+  enabled: true
+  certManagerClusterIssuer: letsencrypt-prod

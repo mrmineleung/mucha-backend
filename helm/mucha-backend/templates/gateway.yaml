@@ -1,132 +1,18 @@
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: tls-gateway
-  namespace: istio-system
-  annotations:
-    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
-{{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
-{{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-cert"*/}}
-{{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
-{{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
-{{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
+  name: istio-gateway
 spec:
-  gatewayClassName: istio
-  listeners:
-    - name: {{ .Values.app.name }}-http
-      port: 80
-      protocol: HTTP
-{{/*      hostname: "{{ .Values.app.domain }}"*/}}
-      allowedRoutes:
-        namespaces:
-          from: All
-{{/*    - name: {{ .Values.app.name }}-https*/}}
-{{/*      port: 443*/}}
-{{/*      protocol: HTTPS*/}}
-{{/*      hostname: "{{ .Values.app.domain }}"*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*      tls:*/}}
-{{/*        mode: Terminate*/}}
-{{/*        certificateRefs:*/}}
-{{/*        - name: {{ .Values.app.name }}-cert*/}}
-{{/*          namespace: istio-system*/}}
-{{/*    - name: {{ .Values.app.name }}-wildcard-http*/}}
-{{/*      port: 80*/}}
-{{/*      protocol: HTTP*/}}
-{{/*      hostname: "*.{{ .Values.app.domain }}"*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*    - name: {{ .Values.app.name }}-wildcard-https*/}}
-{{/*      port: 443*/}}
-{{/*      protocol: HTTPS*/}}
-{{/*      hostname: "*.{{ .Values.app.domain }}"*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*      tls:*/}}
-{{/*        mode: Terminate*/}}
-{{/*        certificateRefs:*/}}
-{{/*          - name: {{ .Values.app.name }}-cert*/}}
-{{/*            namespace: istio-system*/}}
-    - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-http
-      port: 80
-      protocol: HTTP
-      hostname: "{{ .Values.environment.domain }}"
-      allowedRoutes:
-        namespaces:
-          from: All
-{{/*    - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-https*/}}
-{{/*      port: 443*/}}
-{{/*      protocol: HTTPS*/}}
-{{/*      hostname: "{{ .Values.environment.domain }}"*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*      tls:*/}}
-{{/*        mode: Terminate*/}}
-{{/*        certificateRefs:*/}}
-{{/*          - name: {{ .Values.app.name }}-cert*/}}
-{{/*            namespace: istio-system*/}}
-{{/*    - name: {{ .Values.app.name }}-https-default-tls-mode*/}}
-{{/*      port: 8443*/}}
-{{/*      protocol: HTTPS*/}}
-{{/*      hostname: "*.{{ .Values.app.domain }}"*/}}
-{{/*      allowedRoutes:*/}}
-{{/*        namespaces:*/}}
-{{/*          from: All*/}}
-{{/*      tls:*/}}
-{{/*        certificateRefs:*/}}
-{{/*        - name: {{ .Values.app.name }}-cert*/}}
-{{/*          namespace: istio-system*/}}
-
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: {{ .Release.Name }}-{{ .Values.environment.name }}-0
-  namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ .Values.app.name }}
-    environment: {{ .Values.environment.name }}
-spec:
-  parentRefs:
-    - name: tls-gateway
-      namespace: istio-system
-      sectionName: {{ .Values.app.name }}-http
-{{/*    - name: tls-gateway*/}}
-{{/*      namespace: istio-system*/}}
-{{/*      sectionName: {{ .Values.app.name }}-https*/}}
-  rules:
-    - matches:
-      - path:
-          type: PathPrefix
-          value: /{{ .Values.environment.name }}
-      backendRefs:
-      - name: {{ .Values.app.name }}
-        port: {{ .Values.environment.httpContainerPort }}
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: {{ .Release.Name }}-{{ .Values.environment.name }}-1
-  namespace: {{ .Release.Namespace }}
-  labels:
-    app: {{ .Values.app.name }}
-    environment: {{ .Values.environment.name }}
-spec:
-  parentRefs:
-    - name: tls-gateway
-      namespace: istio-system
-      sectionName: {{ .Values.app.name }}-{{ .Values.environment.name }}-http
-{{/*    - name: tls-gateway*/}}
-{{/*      namespace: istio-system*/}}
-{{/*      sectionName: {{ .Values.app.name }}-{{ .Values.environment.name }}-https*/}}
-  rules:
-    - backendRefs:
-      - name: {{ .Values.app.name }}
-        port: {{ .Values.environment.httpContainerPort }}
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.app.name }}-tls
+        namespace:
+      hosts:
+        - {{ .Values.app.host }}

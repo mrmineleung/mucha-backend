@@ -1,28 +1,25 @@
-# Global settings for Istio
-#global:
-#  istio:
-#    ingressGateway: "istio-ingressgateway"
-
-# Application settings - Define the app name and version
 app:
-  name: "mucha-backend"    # Application name
-  domain: "mucha.com.mp"
+  name: mucha-backend
+  image:
+  port: 8000
+  host:
 
-# Environment-specific configurations
-environment:
-  name: ""
-  domain: ""
-  path: "/"
-  image: ""
-  replicas: 3
-  httpPort: 80
-  httpsPort: 443
-  httpTargetPort: 80
-  httpsTargetPort: 443
-  httpContainerPort: 80
-  httpsContainerPort: 443
-  nodePort: 31600
-  version: ""
+deployment:
+  environment: staging
+  version:
+  strategy: blue-green
+  activeColor: blue
+  replicas: 2
+  canaryEnabled: true
+  canaryWeights:
+    blue: 90
+    green: 10
 
-oci:
-  networkSecurityGroup: ""
+#ingress:
+#  hosts:
+#    - host: api.domain.com
+#      paths: ["/"]
+
+#tls:
+#  enabled: true
+#  certManagerClusterIssuer: letsencrypt-prod

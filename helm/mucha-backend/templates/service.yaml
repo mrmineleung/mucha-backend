@@ -2,20 +2,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.app.name }}
-  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Values.app.name }}
-    environment: {{ .Values.environment.name }}
-
+    environment: {{ .Values.deployment.name }}
+    version: {{ .Values.deployment.version }}
 spec:
   selector:
     app: {{ .Values.app.name }}
   ports:
-    - port: {{ .Values.environment.httpPort }}
-      targetPort: {{ .Values.environment.httpTargetPort }}
-      protocol: TCP
-      name: http
-    - port: {{ .Values.environment.httpsPort }}
-      targetPort: {{ .Values.environment.httpsTargetPort }}
-      protocol: TCP
-      name: https
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.app.port }}

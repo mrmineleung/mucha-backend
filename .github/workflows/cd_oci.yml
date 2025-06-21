@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Define env name'
+        description: 'Environment'
         required: true
         type: choice
         options:
@@ -12,8 +12,24 @@ on:
           - prod
         default: 'staging'
       version:
-        description: 'Define version (image name)'
+        description: 'Version (image name)'
         required: true
+      color:
+        description: 'Color'
+        required: false
+        type: choice
+        options:
+          - blue
+          - green
+        default: 'blue'
+      canaryEnabled:
+        description: 'Canary Enabled'
+        required: false
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: 'false'
 
 
 jobs:
@@ -60,10 +76,12 @@ jobs:
         changes: |
           {
             "app.namespace": "${{ secrets.PROJECT_NAMESPACE }}",
-            "environment.name": "${{ github.event.inputs.environment }}",
-            "environment.version": "${{ github.event.inputs.version }}",
-            "environment.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
-            "environment.domain": "${{ secrets.API_ENDPOINT }}",
+            "deployment.environment": "${{ github.event.inputs.environment }}",
+            "deployment.version": "${{ github.event.inputs.version }}",
+            "deployment.activeColor": "${{ github.event.inputs.color }}",
+            "deployment.canaryEnabled": "${{ github.event.inputs.canaryEnabled }}",
+            "app.image": "${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY_NAME }}",
+            "app.host": "${{ secrets.APP_HOST }}",
             "oci.networkSecurityGroup": "${{ secrets.OCI_NETWORK_SECURITY_GROUP }}"
           }
 

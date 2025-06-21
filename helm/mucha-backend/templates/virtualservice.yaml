@@ -1,23 +1,30 @@
-{{/*apiVersion: networking.istio.io/v1alpha3*/}}
-{{/*kind: VirtualService*/}}
-{{/*metadata:*/}}
-{{/*  name: {{ .Release.Name }}-{{ .Values.environment.name }}-virtualservice*/}}
-{{/*  namespace: {{ .Release.Namespace }}*/}}
-{{/*  labels:*/}}
-{{/*    app: {{ .Values.app.name }}*/}}
-{{/*    environment: {{ .Values.environment.name }}*/}}
-{{/*spec:*/}}
-{{/*  hosts:*/}}
-{{/*    - "*"*/}}
-{{/*    - "{{ .Values.environment.domain }}"*/}}
-{{/*  gateways:*/}}
-{{/*    - istio-gateway.istio-system.svc.cluster.local*/}}
-{{/*  http:*/}}
-{{/*    - match:*/}}
-{{/*        - uri:*/}}
-{{/*            prefix: "{{ .Values.environment.path }}"*/}}
-{{/*      route:*/}}
-{{/*        - destination:*/}}
-{{/*            host: {{ .Values.app.name }}*/}}
-{{/*            port:*/}}
-{{/*              number: {{ .Values.environment.port }}*/}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+    environment: {{ .Values.deployment.environment }}
+    version: {{ .Values.deployment.version }}
+spec:
+  hosts:
+    - {{ .Values.app.host }}
+  gateways:
+    - istio-gateway
+  http:
+    - route:
+        {{- if .Values.deployment.canaryEnabled }}
+        - destination:
+            host: {{ .Values.app.name }}
+            subset: blue
+          weight: {{ .Values.deployment.canaryWeights.blue }}
+        - destination:
+            host: {{ .Values.app.name }}
+            subset: green
+          weight: {{ .Values.deployment.canaryWeights.green }}
+        {{- else }}
+        - destination:
+            host: {{ .Values.app.name }}
+            subset: {{ .Values.deployment.activeColor }}
+          weight: 100
+        {{- end }}

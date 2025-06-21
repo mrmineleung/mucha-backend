@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+    environment: {{ .Values.deployment.environment }}
+spec:
+  host: {{ .Values.app.name }}
+  subsets:
+    - name: blue
+      labels:
+        color: blue
+    - name: green
+      labels:
+        color: green

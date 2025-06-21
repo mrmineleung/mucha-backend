@@ -1,49 +1,30 @@
+{{- $activeColor := .Values.deployment.activeColor }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.app.name }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Values.app.name }}-{{ $activeColor }}
   labels:
     app: {{ .Values.app.name }}
-    version: {{ .Values.environment.version }}
-    environment: {{ .Values.environment.name }}
+    color: {{ $activeColor }}
+    environment: {{ .Values.deployment.environment }}
+    version: {{ .Values.deployment.version }}
 spec:
-  replicas: {{ .Values.environment.replicas }}
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
       app: {{ .Values.app.name }}
-      environment: {{ .Values.environment.name }}
+      color: {{ $activeColor }}
+      environment: {{ .Values.deployment.environment }}
   template:
     metadata:
       labels:
         app: {{ .Values.app.name }}
-        version: {{ .Values.environment.version }}
-        environment: {{ .Values.environment.name }}
+        color: {{ $activeColor }}
+        environment: {{ .Values.deployment.environment }}
+        version: {{ .Values.deployment.version }}
     spec:
       containers:
         - name: {{ .Values.app.name }}
-          image: "{{ .Values.environment.image }}:{{ .Values.environment.version }}"
-          resources:
-            requests:
-              memory: "300Mi"
-              cpu: "250m"
-            limits:
-              memory: "400Mi"
-              cpu: "500m"
+          image: {{ .Values.app.image }}
           ports:
-            - containerPort: {{ .Values.environment.httpContainerPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
-          volumeMounts:
-            - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config-volume
-              mountPath: "/.env"
-              subPath: .env
-              readOnly: true
-      volumes:
-        - name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config-volume
-          configMap:
-            name: {{ .Values.app.name }}-{{ .Values.environment.name }}-config
-
-
-
+            - containerPort: {{ .Values.app.port }}
