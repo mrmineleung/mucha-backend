@@ -1,19 +1,16 @@
-{{- range $key, $val := .Values.environment }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ $val.certificate.name }}
+  name: {{ .Values.app.name }}-staging-tls
   namespace: istio-system
 spec:
-  secretName: {{ $val.certificate.name }}
+  secretName: {{ .Values.app.name }}-staging-tls
   duration: 2160h # 90d
   renewBefore: 360h # 15d
   isCA: false
   issuerRef:
-    name: {{ $val.certificate.issuerRef }}
+    name: letsencrypt-staging
     kind: ClusterIssuer
-  commonName: {{ $val.certificate.commonName }}
+{{/*  commonName: {{ .Values.app.host }}*/}}
   dnsNames:
-    - {{- if ne $key "prod" -}}{{ $key }}.{{- end -}}{{ $val.certificate.commonName }}
----
-{{- end }}
+    - staging.{{ .Values.app.host }}
