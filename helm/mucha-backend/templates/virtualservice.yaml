@@ -10,7 +10,7 @@ spec:
   hosts:
     - {{ .Values.app.host }}
   gateways:
-    - istio-gateway
+    - istio-system/istio-gateway
   http:
     - match:
       - uri:
