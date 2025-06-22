@@ -1,16 +1,19 @@
+{{- range $key, $val := .Values.environment }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.app.name }}-tls
+  name: {{ .Values.app.name }}-{{ $key }}-tls
   namespace: istio-system
 spec:
-  secretName: {{ .Values.app.name }}-tls
+  secretName: {{ .Values.app.name }}-{{ $key }}-tls
   duration: 2160h # 90d
   renewBefore: 360h # 15d
   isCA: false
   issuerRef:
-    name: {{ .Values.tls.certManagerClusterIssuer }}
+    name: {{ $val.certificate.issuerRef }}
     kind: ClusterIssuer
   commonName: {{ .Values.app.host }}
   dnsNames:
-    - {{ .Values.app.host }}
+    - {{- if ne $key "prod" -}}{{ $key }}{{- end -}}{{ .Values.app.host }}
+---
+{{- end }}

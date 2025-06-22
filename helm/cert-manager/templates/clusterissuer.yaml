@@ -1,16 +1,19 @@
+{{- range $key, $val := .Values.environment }}
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt-prod
+  name: {{ $val.clusterIssuer.name }}
   namespace: istio-system
 spec:
   acme:
     email: your-email@{{ .Values.app.host }}
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: {{ $val.clusterIssuer.server }}
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: {{ $val.clusterIssuer.privateKeySecretRef }}
     solvers:
       - http01:
           ingress:
             ingressClassName: istio
         selector: {}
+---
+{{- end }}

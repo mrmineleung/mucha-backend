@@ -8,7 +8,7 @@ metadata:
     version: {{ .Values.deployment.version }}
 spec:
   hosts:
-    - {{ .Values.app.host }}
+    - {{- if ne .Values.deployment.environment "prod" -}}{{ .Values.deployment.environment }}.{{- end -}}{{ .Values.app.host }}
   gateways:
     - istio-system/istio-gateway
   http:
