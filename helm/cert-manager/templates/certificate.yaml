@@ -5,6 +5,9 @@ metadata:
   namespace: istio-system
 spec:
   secretName: {{ .Values.app.name }}-tls
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
   issuerRef:
     name: {{ .Values.tls.certManagerClusterIssuer }}
     kind: ClusterIssuer
