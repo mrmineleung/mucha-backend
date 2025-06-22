@@ -11,6 +11,7 @@ from controller.admin_controller import admin_controller_router
 from controller.analytics_controller import analytics_controller_router
 from controller.auth_controller import auth_controller_router
 from controller.chart_controller import chart_controller_router
+from controller.index_controller import index_controller_router
 from controller.playlist_controller import playlist_controller_router
 from controller.song_controller import song_controller_router
 from controller.user_controller import user_controller_router
@@ -47,6 +48,7 @@ app.include_router(playlist_controller_router, prefix="/api/v1/playlists", tags=
 app.include_router(admin_controller_router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(analytics_controller_router, prefix="/api/v1/analytics", tags=["Analytics"])
 app.include_router(song_controller_router, prefix="/api/v1/songs", tags=["Songs"])
+app.include_router(index_controller_router, prefix="/", tags=["Index"])
 
 
 app.add_middleware(
