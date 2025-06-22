@@ -24,7 +24,7 @@ spec:
         - {{ .Values.app.host }}
     - port:
         number: 80
-        name: http
+        name: staging-http
         protocol: HTTP
       hosts:
         - staging.{{ .Values.app.host }}
@@ -38,13 +38,13 @@ spec:
 {{/*        namespace:*/}}
 {{/*      hosts:*/}}
 {{/*        - {{ .Values.app.host }}*/}}
-    - port:
-        number: 443
-        name: https
-        protocol: HTTPS
-      tls:
-        mode: SIMPLE
-        credentialName: {{ .Values.app.name }}-staging-tls
-        namespace:
-      hosts:
-        - staging.{{ .Values.app.host }}
+{{/*    - port:*/}}
+{{/*        number: 443*/}}
+{{/*        name: staging-https*/}}
+{{/*        protocol: HTTPS*/}}
+{{/*      tls:*/}}
+{{/*        mode: SIMPLE*/}}
+{{/*        credentialName: {{ .Values.app.name }}-staging-tls*/}}
+{{/*        namespace:*/}}
+{{/*      hosts:*/}}
+{{/*        - staging.{{ .Values.app.host }}*/}}
