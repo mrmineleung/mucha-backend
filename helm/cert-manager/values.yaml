@@ -5,14 +5,14 @@ app:
 environment:
   staging:
     clusterIssuer:
-      name: letsencrypt-staging
+      name: "letsencrypt-staging"
       email:
-      server: https://acme-staging-v02.api.letsencrypt.org/directory
-      privateKeySecretRef: letsencrypt-staging
+      server: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      privateKeySecretRef: "letsencrypt-staging"
     certificate:
-      name: mucha-backend-staging-tls
+      name: "mucha-backend-staging-tls"
       issuerRef:
-        name: letsencrypt-staging
-        kind: ClusterIssuer
+        name: "letsencrypt-staging"
+        kind: "ClusterIssuer"
       commonName:
 
