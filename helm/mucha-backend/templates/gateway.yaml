@@ -7,14 +7,14 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
-{{/*    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"*/}}
-{{/*    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-tls"*/}}
+    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/oci-load-balancer-tls-secret: "{{ .Values.app.name }}-tls"
     {{/*    oci.oraclecloud.com/oci-network-security-groups: "{{ .Values.oci.networkSecurityGroup }}"*/}}
     {{/*    service.beta.kubernetes.io/oci-load-balancer-security-list-management-mode: "None"*/}}
     {{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
 spec:
   selector:
-    istio: ingressgateway
+    istio: istio=ingress
   servers:
     - port:
         number: 80
@@ -22,13 +22,13 @@ spec:
         protocol: HTTP
       hosts:
         - {{ .Values.app.host }}
-{{/*    - port:*/}}
-{{/*        number: 443*/}}
-{{/*        name: https*/}}
-{{/*        protocol: HTTPS*/}}
-{{/*      tls:*/}}
-{{/*        mode: SIMPLE*/}}
-{{/*        credentialName: {{ .Values.app.name }}-tls*/}}
-{{/*        namespace:*/}}
-{{/*      hosts:*/}}
-{{/*        - {{ .Values.app.host }}*/}}
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.app.name }}-tls
+        namespace:
+      hosts:
+        - {{ .Values.app.host }}
