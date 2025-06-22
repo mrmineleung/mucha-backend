@@ -18,6 +18,14 @@ spec:
   http:
     - match:
       - uri:
+          prefix: "/.well-known/acme-challenge/"
+      route:
+        - destination:
+            host: cert-manager-webhook.cert-manager.svc.cluster.local
+            port:
+              number: 443
+    - match:
+      - uri:
           prefix: /
       route:
         {{- if .Values.deployment.canaryEnabled }}
