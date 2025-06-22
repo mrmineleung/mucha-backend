@@ -14,7 +14,7 @@ spec:
   http:
     - match:
       - uri:
-          prefix: /{{ .Values.deployment.environment }}
+          prefix: /
       route:
         {{- if .Values.deployment.canaryEnabled }}
         - destination:
