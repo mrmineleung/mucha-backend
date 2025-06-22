@@ -59,7 +59,7 @@ jobs:
             "environment.staging.clusterIssuer.email": "admin@${{ secrets.APP_HOST }}",
             "environment.prod.clusterIssuer.email": "admin@${{ secrets.APP_HOST }}",
             "environment.staging.certificate.commonName": "${{ secrets.APP_HOST }}",
-            "environment.prod.certificate.commonName": "${{ secrets.APP_HOST }}",
+            "environment.prod.certificate.commonName": "${{ secrets.APP_HOST }}"
           }
 
     - name: Deploy to OKE using Helm
