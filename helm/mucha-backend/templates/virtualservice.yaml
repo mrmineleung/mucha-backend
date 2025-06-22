@@ -18,14 +18,6 @@ spec:
   http:
     - match:
       - uri:
-          prefix: "/.well-known/acme-challenge/"
-      route:
-        - destination:
-            host: cert-manager-webhook.cert-manager.svc.cluster.local
-            port:
-              number: 443
-    - match:
-      - uri:
           prefix: /
       route:
         {{- if .Values.deployment.canaryEnabled }}
@@ -49,3 +41,27 @@ spec:
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: cert-manager-acme-challenge
+  namespace: istio-system
+spec:
+  hosts:
+    {{ if ne .Values.deployment.environment "prod" }}
+    - {{ .Values.deployment.environment }}.{{ .Values.app.host }}
+        {{ else }}
+    - {{ .Values.app.host }}
+        {{ end }}
+  gateways:
+    - istio-system/istio-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/.well-known/acme-challenge/"
+      route:
+        - destination:
+            host: cert-manager.cert-manager.svc.cluster.local
+            port:
+              number: 8080
