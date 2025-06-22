@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from fastapi_cache import FastAPICache
@@ -11,7 +11,6 @@ from controller.admin_controller import admin_controller_router
 from controller.analytics_controller import analytics_controller_router
 from controller.auth_controller import auth_controller_router
 from controller.chart_controller import chart_controller_router
-from controller.index_controller import index_controller_router
 from controller.playlist_controller import playlist_controller_router
 from controller.song_controller import song_controller_router
 from controller.user_controller import user_controller_router
@@ -39,7 +38,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan, openapi_tags=openapi_tags.tags_metadata)
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
-
 # Include the routers from controller modules
 app.include_router(user_controller_router, prefix="/api/v1/users", tags=["Users"])
 app.include_router(auth_controller_router, prefix="/api/v1/auth", tags=["Authentication"])
@@ -48,8 +46,6 @@ app.include_router(playlist_controller_router, prefix="/api/v1/playlists", tags=
 app.include_router(admin_controller_router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(analytics_controller_router, prefix="/api/v1/analytics", tags=["Analytics"])
 app.include_router(song_controller_router, prefix="/api/v1/songs", tags=["Songs"])
-app.include_router(index_controller_router, prefix="/", tags=["Index"])
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -58,6 +54,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+async def root():
+    return Response(status_code=status.HTTP_200_OK)
+
 
 if __name__ == '__main__':
     uvicorn.run("main:app", host=os.environ.get("HOST"), port=int(os.environ.get("PORT")), reload=True)
