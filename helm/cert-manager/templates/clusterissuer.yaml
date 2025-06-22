@@ -11,6 +11,8 @@ spec:
       name: letsencrypt-staging
     solvers:
       - http01:
-          ingress:
-            ingressClassName: istio
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: istio-gateway
+                namespace: istio-system
         selector: {}

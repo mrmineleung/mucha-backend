@@ -18,8 +18,6 @@ spec:
   http:
     - match:
       - uri:
-          prefix: "/.well-known/acme-challenge/"
-      - uri:
           prefix: /
       route:
         {{- if .Values.deployment.canaryEnabled }}
