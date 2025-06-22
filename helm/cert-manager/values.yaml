@@ -6,10 +6,13 @@ environment:
   staging:
     clusterIssuer:
       name: letsencrypt-staging
+      email:
       server: https://acme-staging-v02.api.letsencrypt.org/directory
       privateKeySecretRef: letsencrypt-staging
     certificate:
+      name: mucha-backend-staging-tls
       issuerRef:
         name: letsencrypt-staging
         kind: ClusterIssuer
+      commonName:
 

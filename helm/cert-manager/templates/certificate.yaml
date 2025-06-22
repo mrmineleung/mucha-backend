@@ -2,18 +2,18 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Values.app.name }}-{{ $key }}-tls
+  name: {{ $val.certificate.name }}
   namespace: istio-system
 spec:
-  secretName: {{ .Values.app.name }}-{{ $key }}-tls
+  secretName: {{ $val.certificate.name }}
   duration: 2160h # 90d
   renewBefore: 360h # 15d
   isCA: false
   issuerRef:
     name: {{ $val.certificate.issuerRef }}
     kind: ClusterIssuer
-  commonName: {{ .Values.app.host }}
+  commonName: {{ $val.certificate.commonName }}
   dnsNames:
-    - {{- if ne $key "prod" -}}{{ $key }}{{- end -}}{{ .Values.app.host }}
+    - {{- if ne $key "prod" -}}{{ $key }}.{{- end -}}{{ $val.certificate.commonName }}
 ---
 {{- end }}

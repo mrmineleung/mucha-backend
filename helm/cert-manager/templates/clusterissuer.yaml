@@ -6,7 +6,7 @@ metadata:
   namespace: istio-system
 spec:
   acme:
-    email: your-email@{{ .Values.app.host }}
+    email: admin@{{ $val.clusterIssuer.email }}
     server: {{ $val.clusterIssuer.server }}
     privateKeySecretRef:
       name: {{ $val.clusterIssuer.privateKeySecretRef }}
