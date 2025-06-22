@@ -14,7 +14,7 @@ metadata:
     {{/*    oci.oraclecloud.com/security-rule-management-mode: "None"*/}}
 spec:
   selector:
-    istio: istio=ingress
+    istio: ingress
   servers:
     - port:
         number: 80
