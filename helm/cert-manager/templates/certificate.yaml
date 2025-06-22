@@ -11,6 +11,6 @@ spec:
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
-{{/*  commonName: {{ .Values.app.host }}*/}}
+  commonName: {{ .Values.app.host }}
   dnsNames:
     - staging.{{ .Values.app.host }}

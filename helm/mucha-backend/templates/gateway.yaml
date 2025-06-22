@@ -21,13 +21,13 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - {{ .Values.app.host }}
-    - port:
-        number: 80
-        name: staging-http
-        protocol: HTTP
-      hosts:
-        - staging.{{ .Values.app.host }}
+        - "*"
+{{/*    - port:*/}}
+{{/*        number: 80*/}}
+{{/*        name: staging-http*/}}
+{{/*        protocol: HTTP*/}}
+{{/*      hosts:*/}}
+{{/*        - staging.{{ .Values.app.host }}*/}}
 {{/*    - port:*/}}
 {{/*        number: 443*/}}
 {{/*        name: https*/}}
