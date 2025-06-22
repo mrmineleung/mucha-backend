@@ -13,27 +13,27 @@ spec:
     - istio-gateway
   http:
     - match:
-        - uri:
-            prefix: /{{ .Values.deployment.environment }}
+      - uri:
+          prefix: /{{ .Values.deployment.environment }}
       route:
         {{- if .Values.deployment.canaryEnabled }}
         - destination:
             host: {{ .Values.app.name }}
             port:
-              number: 8000
+              number: {{ .Values.app.port }}
             subset: blue
           weight: {{ .Values.deployment.canaryWeights.blue }}
         - destination:
             host: {{ .Values.app.name }}
             port:
-              number: 8000
+              number: {{ .Values.app.port }}
             subset: green
           weight: {{ .Values.deployment.canaryWeights.green }}
         {{- else }}
         - destination:
             host: {{ .Values.app.name }}
             port:
-              number: 8000
+              number: {{ .Values.app.port }}
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}

@@ -4,12 +4,11 @@ metadata:
   name: {{ .Values.app.name }}
   labels:
     app: {{ .Values.app.name }}
-    environment: {{ .Values.deployment.name }}
+    environment: {{ .Values.deployment.environment }}
     version: {{ .Values.deployment.version }}
 spec:
   selector:
     app: {{ .Values.app.name }}
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: {{ .Values.app.port }}
+      port: {{ .Values.app.port }}
