@@ -19,15 +19,21 @@ spec:
         {{- if .Values.deployment.canaryEnabled }}
         - destination:
             host: {{ .Values.app.name }}
+            port:
+              number: 8000
             subset: blue
           weight: {{ .Values.deployment.canaryWeights.blue }}
         - destination:
             host: {{ .Values.app.name }}
+            port:
+              number: 8000
             subset: green
           weight: {{ .Values.deployment.canaryWeights.green }}
         {{- else }}
         - destination:
             host: {{ .Values.app.name }}
+            port:
+              number: 8000
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}
