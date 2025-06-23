@@ -55,7 +55,8 @@ spec:
     - match:
       - uri:
           regex: \/.well-known\/acme-challenge\/.*
-      directResponse:
-        status: 200
-        body:
-          string: "{\"message\": \"OK\"}"
+      route:
+        - destination:
+            host: cm-acme-http-solver-954pl.istio-system.svc.cluster.local
+            port:
+              number: 8089
