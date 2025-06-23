@@ -41,3 +41,21 @@ spec:
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: acme-challenge
+spec:
+  hosts:
+    - staging.{{ .Values.app.host }}
+  gateways:
+    - istio-system/istio-gateway
+  http:
+    - match:
+      - uri:
+          regex: \/\.well-known\/acme-challenge\?.*
+      directResponse:
+        status: 200
+        body:
+          string: "{\"message\": \"OK\"}"
