@@ -54,7 +54,7 @@ spec:
   http:
     - match:
       - uri:
-          regex: \/.well-known\/acme-challenge\?.*
+          regex: \/.well-known\/acme-challenge\/.*
       directResponse:
         status: 200
         body:
