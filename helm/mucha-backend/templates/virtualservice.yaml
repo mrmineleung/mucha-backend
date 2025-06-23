@@ -41,6 +41,15 @@ spec:
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}
+      corsPolicy:
+        allowOrigins:
+          - exact: https://music-chart-frontend.vercel.app
+        allowMethods:
+          - POST
+          - GET
+          - PUT
+          - PATCH
+          - DELETE
 {{/*---*/}}
 {{/*apiVersion: networking.istio.io/v1beta1*/}}
 {{/*kind: VirtualService*/}}
