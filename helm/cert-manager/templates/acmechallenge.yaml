@@ -32,9 +32,10 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ .Values.app.name }}
+  name: acme-challenge
+  namespace: istio-system
   labels:
-    app: {{ .Values.app.name }}
+    app: acme-challenge
 spec:
   hosts:
     - staging.{{ .Values.app.host }}
