@@ -9,6 +9,7 @@ on:
         type: choice
         options:
           - cert-manager
+          - caddy-server
         default: 'cert-manager'
 
 
