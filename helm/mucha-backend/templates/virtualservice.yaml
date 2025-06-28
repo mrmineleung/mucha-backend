@@ -9,9 +9,9 @@ metadata:
 spec:
   hosts:
     {{ if ne .Values.deployment.environment "prod" }}
-    - {{ .Values.deployment.environment }}.{{ .Values.app.host }}
+    - {{ .Values.deployment.environment }}-api.{{ .Values.app.host }}
     {{ else }}
-    - {{ .Values.app.host }}
+    - api.{{ .Values.app.host }}
     {{ end }}
   gateways:
     - istio-system/istio-gateway
@@ -41,18 +41,6 @@ spec:
             subset: {{ .Values.deployment.activeColor }}
           weight: 100
         {{- end }}
-      corsPolicy:
-        allowOrigins:
-          - exact: https://music-chart-frontend.vercel.app
-        allowMethods:
-          - POST
-          - GET
-          - PUT
-          - PATCH
-          - DELETE
-        allowHeaders:
-          - Authorization
-          - Content-Type
 {{/*---*/}}
 {{/*apiVersion: networking.istio.io/v1beta1*/}}
 {{/*kind: VirtualService*/}}

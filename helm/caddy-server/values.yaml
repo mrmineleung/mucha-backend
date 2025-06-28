@@ -1,0 +1,4 @@
+app:
+  name: caddy
+  image: caddy
+  host:

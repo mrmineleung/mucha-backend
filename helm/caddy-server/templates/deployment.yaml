@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      containers:
+        - name: {{ .Values.app.name }}
+          image: {{ .Values.app.image }}
+          volumeMounts:
+            - name: {{ .Values.app.name }}-config
+              mountPath: /etc/caddy/Caddyfile
+      volumes:
+        - name: {{ .Values.app.name }}-config
+          configMap:
+            name: {{ .Values.app.name }}-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.name }}-config
+  namespace: {{ .Values.app.name }}
+data:
+  Caddyfile: |
+    staging-api.{{ .Values.app.host }} {
+        reverse_proxy mucha-backend.mucha-staging.svc.cluster.local:8000
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.app.name }}
+spec:
+  selector:
+    app: {{ .Values.app.name }}
+  ports:
+    - port: 80
+      targetPort: 80
+    - port: 443
+      targetPort: 443
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.app.name }}
+  namespace: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+spec:
+  hosts:
+    "*"
+  gateways:
+    - istio-system/istio-gateway
+  http:
+    - route:
+      - destination:
+          host: {{ .Values.app.name }}
+          port:
+            number: 80
+  tls:
+    - match:
+        - port: 443
+          sniHosts:
+            - staging.mucha.com.mp
+            - staging-api.mucha.com.mp
+      route:
+        - destination:
+            host: {{ .Values.app.name }}
+            port:
+              number: 443
