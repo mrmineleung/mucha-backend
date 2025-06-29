@@ -18,6 +18,9 @@ spec:
       containers:
         - name: {{ .Values.app.name }}
           image: {{ .Values.app.image }}
+          ports:
+            - containerPort: 80
+            - containerPort: 443
           volumeMounts:
             - name: {{ .Values.app.name }}-config
               mountPath: /etc/caddy/Caddyfile
