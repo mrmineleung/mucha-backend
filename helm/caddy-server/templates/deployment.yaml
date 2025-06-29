@@ -24,7 +24,6 @@ spec:
           volumeMounts:
             - name: {{ .Values.app.name }}-config
               mountPath: /etc/caddy/Caddyfile
-              subPath: Caddyfile
       volumes:
         - name: {{ .Values.app.name }}-config
           configMap:
