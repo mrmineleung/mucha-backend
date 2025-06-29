@@ -1,4 +1,4 @@
 app:
   name: caddy
-  image: caddy
+  image: caddy/caddy
   host:
