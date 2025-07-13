@@ -25,6 +25,10 @@ spec:
             - name: {{ .Values.app.name }}-config
               mountPath: /etc/caddy
               readOnly: false
+            - name: {{ .Values.app.name }}-data
+              mountPath: /data
+            - name: {{ .Values.app.name }}-config-dir
+              mountPath: /config
           securityContext:
             runAsUser: 1000  # Example user ID
             runAsGroup: 1000 # Example group ID
@@ -33,6 +37,12 @@ spec:
           configMap:
             defaultMode: 420
             name: {{ .Values.app.name }}-config
+        - name: {{ .Values.app.name }}-data
+          persistentVolumeClaim:
+            claimName: common-pvc
+        - name: {{ .Values.app.name }}-config-dir
+          persistentVolumeClaim:
+            claimName: common-pvc
 ---
 apiVersion: v1
 kind: ConfigMap
