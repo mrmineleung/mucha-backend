@@ -39,10 +39,10 @@ spec:
             name: {{ .Values.app.name }}-config
         - name: {{ .Values.app.name }}-data
           persistentVolumeClaim:
-            claimName: common-pvc
+            claimName: {{ .Values.app.name }}-pvc
         - name: {{ .Values.app.name }}-config-dir
           persistentVolumeClaim:
-            claimName: common-pvc
+            claimName: {{ .Values.app.name }}-pvc
 ---
 apiVersion: v1
 kind: ConfigMap
