@@ -24,10 +24,14 @@ spec:
           volumeMounts:
             - name: {{ .Values.app.name }}-config
               mountPath: /etc/caddy
-              subPath: Caddyfile
+              readOnly: false
+          securityContext:
+            runAsUser: 1000  # Example user ID
+            runAsGroup: 1000 # Example group ID
       volumes:
         - name: {{ .Values.app.name }}-config
           configMap:
+            defaultMode: 420
             name: {{ .Values.app.name }}-config
 ---
 apiVersion: v1
