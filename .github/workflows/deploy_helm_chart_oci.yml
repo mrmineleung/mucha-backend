@@ -10,6 +10,7 @@ on:
         options:
           - cert-manager
           - caddy-server
+          - pvc
         default: 'cert-manager'
 
 
