@@ -5,8 +5,9 @@ metadata:
   namespace: caddy
 spec:
   storageClassName: "oci-bv"
+  volumeMode: Block
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 50Gi
+      storage: 5Gi
