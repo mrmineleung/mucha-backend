@@ -25,10 +25,11 @@ spec:
             - name: {{ .Values.app.name }}-config
               mountPath: /etc/caddy
               readOnly: false
+          volumeDevices:
             - name: {{ .Values.app.name }}-data
-              mountPath: /data
+              devicePath: /dev/block/data
             - name: {{ .Values.app.name }}-config-dir
-              mountPath: /config
+              devicePath: /dev/block/config
           securityContext:
             runAsUser: 1000  # Example user ID
             runAsGroup: 1000 # Example group ID
