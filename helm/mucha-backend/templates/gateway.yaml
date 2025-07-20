@@ -9,19 +9,11 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
 spec:
   selector:
-    istio: ingress
+    istio: ingressgateway
   servers:
     - port:
         number: 80
         name: http
         protocol: HTTP
-      hosts:
-        - "*"
-    - port:
-        number: 443
-        name: https
-        protocol: HTTPS
-      tls:
-        mode: PASSTHROUGH
       hosts:
         - "*"
