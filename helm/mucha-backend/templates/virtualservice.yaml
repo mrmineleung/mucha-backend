@@ -14,7 +14,7 @@ spec:
     - {{ .Values.app.host }}
     {{ end }}
   gateways:
-    - istio-system/{{ .Values.app.name }}-{{ .Values.deployment.environment }}-gateway
+    - istio-ingress/{{ .Values.app.name }}-{{ .Values.deployment.environment }}-gateway
   http:
     - match:
       - uri:

@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-gateway
-  namespace: istio-system
+  namespace: istio-ingress
   labels:
     app: {{ .Values.app.name }}
     environment: {{ .Values.deployment.environment }}
