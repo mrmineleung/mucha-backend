@@ -11,6 +11,7 @@ on:
           - cert-manager
           - caddy-server
           - pvc
+          - ingress
         default: 'cert-manager'
 
 
