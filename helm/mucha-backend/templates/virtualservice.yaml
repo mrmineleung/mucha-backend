@@ -9,9 +9,9 @@ metadata:
 spec:
   hosts:
     {{ if ne .Values.deployment.environment "prod" }}
-    - {{ .Values.deployment.environment }}-api.{{ .Values.app.host }}
+    - {{ .Values.deployment.environment }}.{{ .Values.app.host }}
     {{ else }}
-    - api.{{ .Values.app.host }}
+    - {{ .Values.app.host }}
     {{ end }}
   gateways:
     - istio-system/istio-gateway
