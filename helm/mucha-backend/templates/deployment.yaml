@@ -43,7 +43,13 @@ spec:
               mountPath: "/.env"
               subPath: .env
               readOnly: true
+          volumeDevices:
+            - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-data
+              devicePath: /dev/block/{{ .Values.app.name }}/{{ .Values.deployment.environment }}
       volumes:
         - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config-volume
           configMap:
             name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
+        - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.app.name }}-pvc

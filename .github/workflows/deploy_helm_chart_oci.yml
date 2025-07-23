@@ -8,11 +8,12 @@ on:
         required: true
         type: choice
         options:
-          - cert-manager
+          - certificate
+          - clusterissuer
           - caddy-server
           - pvc
           - ingress
-        default: 'cert-manager'
+        default: 'clusterissuer'
 
 
 jobs:
