@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mucha-backend-pvc
+  name: mucha-staging-pvc
+  namespace: mucha-staging
 spec:
   storageClassName: "oci-bv"
   volumeMode: Block

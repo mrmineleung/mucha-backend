@@ -52,4 +52,4 @@ spec:
             name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-config
         - name: {{ .Values.app.name }}-{{ .Values.deployment.environment }}-data
           persistentVolumeClaim:
-            claimName: {{ .Values.app.name }}-pvc
+            claimName: {{ .Release.Namespace }}-pvc
