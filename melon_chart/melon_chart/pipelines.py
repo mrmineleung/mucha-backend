@@ -67,7 +67,7 @@ class SongMongoDBWriterPipeline(object):
             new_song_id = ''
 
             if song is None:
-                search_result = search_data_from_youtube(f'{song_title} {song_artists}')
+                search_result = search_data_from_youtube(f'{song_title} {song_artists} Music Video')
                 youtube_video_id = search_result['id']
                 youtube_video_title = search_result['title']
                 youtube_video_author = search_result['author']

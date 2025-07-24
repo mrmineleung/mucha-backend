@@ -9,7 +9,7 @@ from model.base import Base
 class Rank(BaseModel):
     rank: str | None = None
     rank_changes_flow: str | None = None
-    rank_changes_position: str | None = None
+    rank_changes_position: str | int | None = None
     album_image: str | None = None
     song_title: str | None = None
     song_artists: str | None = None
@@ -17,6 +17,7 @@ class Rank(BaseModel):
     youtube_video_id: str | None = None
     youtube_video_title: str | None = None
     youtube_video_author: str | None = None
+    song_id: str | None = None
 
 
 class Ranking(Base):
@@ -31,6 +32,14 @@ class Ranking(Base):
         cache_expiration_time = datetime.timedelta(seconds=3600)
         cache_capacity = 20
 
+class RankingView(BaseModel):
+    chart: str | None = None
+    type: str | None = None
+    date: str | None = None
+    ranking: List[Rank]
+
+    class Settings:
+        projection = {"_id": 0}
 
 class RankHistoryView(BaseModel):
     rank: str | None = None

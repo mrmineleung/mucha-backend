@@ -4,12 +4,14 @@ from fastapi import HTTPException
 
 from enumerations import Charts
 from service import charts as charts_service
+from service import rankings as rankings_service
 
 logger = logging.getLogger(__name__)
 
 
 async def get_chart(chart_name: Charts, chart_type: str, args: dict) -> dict:
-    chart_data = await charts_service.get_chart(chart_name, chart_type)
+    # chart_data = await charts_service.get_chart(chart_name, chart_type)
+    chart_data = await rankings_service.get_latest_ranking(chart_name.value, chart_type.upper())
 
     if chart_data is None:
         raise HTTPException(status_code=404, detail="Chart not found")
